@@ -1,0 +1,57 @@
+@media (max-width: 600px) {
+  .navbar{
+    flex-direction: column;
+    font-size: large;
+  }
+  .admissionname{
+    font-size: 1.5rem;
+  }
+  .tile{
+    width: 100%;
+  }
+  .inputsyllabus{
+    width: 100%;
+  }
+  .formcontent{
+    margin-left: 0;
+  }
+  .formdiv{
+    padding: 20px 10px;
+  }
+  .dashboard{
+    padding: 20px !important;
+    gap: 20px !important;
+    justify-content: center;
+  }
+  .list{
+    padding: 20px !important;
+    font-size: 1rem !important;
+    gap:15px !important;
+  }
+  .dashname{
+    font-size: larger !important;
+  }
+  .alltile{
+    padding: 10px !important;
+    font-size: large !important;
+    width:100%;
+  }
+  .layout{
+    display: none !important;
+  }
+  .filter{
+    flex-direction: column;
+    gap:5px;
+  }
+  body:has(#check:checked) .alltile{
+  width:auto !important;
+  flex-direction: column !important;
+  }
+  .printmain{
+    justify-content: center !important;
+  }
+  .print button{
+    font-size: 13px !important;
+    padding: 10px 20px !important;
+  }
+}

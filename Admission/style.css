@@ -1,0 +1,160 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+:root{
+    --primary-color: #164f76;
+    --secondary-color: #2ecc71;
+    --background-color: #f5f5f5;
+    --text-color: #333;
+}
+.main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100dvh;
+    overflow-x: auto;
+}
+.navbar{
+    font-size: 2.2rem;
+    display: flex;
+    justify-content: space-around;
+    font-weight: bolder;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    text-transform: capitalize;
+    color: var(--background-color);
+    background-color: var(--primary-color);
+}
+.formdiv{
+    display: flex;
+    flex-direction: column;
+    width: 90vw;
+    gap:60px;
+    padding: 40px;
+    margin-top: 20px;
+    background-color: var(--background-color);
+    box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.1);
+}
+.admissionname{
+    font-size: 2.1rem;
+    font-weight: semi-bold;
+    color: var(--primary-color);
+}
+.formcontent{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 30px 50px;
+    padding: 10px;
+    justify-content: center;
+    margin-left: 15px;
+}
+.inputsyllabus{
+    width:100%;
+    height: 35px;
+/*     padding: 15px 10px; */
+    outline: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    border: 2px solid var(--primary-color);
+}
+.input{
+    width:100%;
+    height: 35px;
+    padding: 15px 10px;
+    outline: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    border: 2px solid var(--primary-color);
+}
+.tile{
+    width: 40%;
+    font-size: 1.3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.table{
+    overflow-x: auto;
+    width:100%;
+}
+.realtable{
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    border:2px solid var(--primary-color);
+}
+.realtable th{
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    padding: 10px;
+}
+.realtable td{
+    padding: 10px;
+    border: 1px solid var(--primary-color);
+}
+.realtable tr{
+    background-color: white;
+}
+.realtable td input{
+    width: 100%;
+    height: 100%;
+    outline: none;
+    font-size: 1rem;
+    border:none;
+    text-align: center;
+}
+.button{
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+.btn{
+    padding: 20px 30px;
+    border-radius: 10px;
+    border:2px solid var(--primary-color);
+    font-size: 1rem;
+    cursor: pointer;
+    color: var(--primary-color);
+    transition: all 0.2s ease;
+}
+.register:hover{
+    background-color: var(--primary-color);
+    color: white;
+}
+.reset{
+    border: 2px solid red;
+    color:red;
+    transition: all 0.3s ease;
+}
+.reset:hover{
+    background-color: red;
+    color:white;
+}
+a{
+    text-decoration: none;
+    color: white;
+}
+.alert{
+    position:fixed;
+    bottom: 20px;
+    right: 40px;
+    z-index: 999;
+    padding: 15px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    border-radius: 10px;
+}
+.alert-success{
+    color: white;
+    background-color: var(--secondary-color);
+}
+.alert-danger{
+    color: white;
+    background-color: red;
+}
