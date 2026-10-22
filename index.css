@@ -1,0 +1,40 @@
+.dashboard{
+    display: flex;
+    padding: 50px 80px;
+    flex-wrap: wrap;
+    gap: 60px;
+}
+a{
+    text-decoration: none;
+}
+.list{
+    border: 2px solid var(--primary-color);
+    padding: 40px;
+    font-size: 1.7rem;
+    display: flex;
+    color: var(--primary-color);
+    align-items: center;
+    justify-content: center;
+    gap:20px;
+    flex-wrap: wrap;
+    border-radius: 20px;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.list p{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+.list:hover{
+    transform: translateY(-15px) scale(1.01);
+    box-shadow: 0px 10px 10px black;
+}
+.dashname{
+    font-size: 1.8rem;
+    margin-top: 20px;
+    width: 90%;
+    border-bottom: 2px solid var(--primary-color);
+    padding: 0 10px;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    color: var(--primary-color);
+}

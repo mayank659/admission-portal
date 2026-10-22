@@ -1,0 +1,165 @@
+.dashname {
+  font-size: 1.8rem;
+  margin-top: 20px;
+  width: 90%;
+  border-bottom: 2px solid var(--primary-color);
+  padding: 0 10px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: var(--primary-color);
+}
+.All_student {
+  padding: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.alltile {
+  border: 2px solid var(--primary-color);
+  display: flex;
+  padding: 40px;
+  font-size: 1.3rem;
+  border-radius: 10px;
+  flex-direction: column;
+  justify-content: space-around;
+  line-height: 2;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition:
+    all 0.3s ease;
+}
+.alltile:hover {
+  transform: translateY(-15px) scale(1.01);
+  box-shadow: 0px 10px 10px black;
+}
+.filter{
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+  font-size: 1.2rem;
+  gap: 5px;
+  color: var(--primary-color);
+  justify-content: space-around;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.branch{
+  font-size: 1rem;
+  padding:10px ;
+  border-radius: 10px;
+  border: 2px solid var(--primary-color);
+  cursor: pointer;
+}
+.layout{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap:5px;
+  cursor: pointer;
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  padding: 5px 10px;
+  border-radius: 5px 10px;
+  cursor: pointer;
+}
+
+body:has(#check:checked) .alltile{
+  width:90%;
+  flex-direction: row;
+  transform: all 0.3s ease;
+}
+
+body:has(#check:checked) .alltile p:first-child,
+body:has(#check:checked) .alltile p:nth-child(2),
+body:has(#check:checked) .alltile p:nth-child(3){
+    border-right: 2px solid var(--primary-color);
+    padding:0 10px;
+    transition: all 0.3s ease;
+}
+
+body:has(#check:checked) .alltile p:last-child{
+    padding-left: 10px;
+    transition: all 0.3s ease;
+}
+.printmain{
+  position:fixed;
+  bottom: 20px;
+  display: flex;
+  width: 100%;
+  justify-content: end;
+  align-items: center;
+}
+.print{
+  display: flex;
+  gap:20px;
+}
+.print button{
+  font-size: 1rem;
+  padding: 20px 30px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.excel{
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+}
+.excel:hover{
+  background-color: rgb(47, 93, 124);
+}
+.pdf{
+  background: var(--secondary-color);
+  color: white;
+  border: none;
+}
+.pdf:hover{
+  background-color: #38da7b;
+}
+
+
+
+@media print{
+  body *{
+    visibility: hidden;
+  }
+  .screen,
+  .screen * {
+    visibility: visible;
+  }
+  .screen{
+  position:fixed;
+  height: 100dvh;
+  width: 100vw;
+  top:0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  z-index: 999999;
+  overflow-y :auto;
+}
+table{
+  border-collapse: collapse;
+  border:2px solid black;
+  width: 90%;
+  text-align: center;
+}
+table tr,td{
+  border:2px solid black
+}
+table th{
+  font-size: 1.2rem;
+}
+table tr{
+  font-size: 1rem;
+}
+table th{
+  background-color: var(--primary-color);
+  color:white;
+}
+  .alltile,
+    button,
+    select {
+        display: none !important;
+    }
+}
