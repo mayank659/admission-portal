@@ -119,6 +119,10 @@ body:has(#check:checked) .alltile p:last-child{
 
 
 @media print{
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
   body *{
     visibility: hidden;
   }

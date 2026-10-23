@@ -1,0 +1,148 @@
+.dashname {
+  font-size: 1.8rem;
+  margin-top: 20px;
+  width: 90%;
+  border-bottom: 2px solid var(--primary-color);
+  padding: 0 10px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: var(--primary-color);
+}
+.formmain {
+  display: flex;
+  justify-content: center;
+}
+.print {
+  position: fixed;
+  height: 100dvh;
+  width: 100%;
+  top: 0;
+  display: none;
+  justify-content: center;
+  right: 0;
+  overflow: hidden;
+}
+.printmain {
+  position: relative;
+  height: 100dvh;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 20px;
+  flex-wrap: nowrap;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: var(--background-color);
+}
+.printp {
+  text-align: center;
+  font-size: 1.2rem;
+  background-color: var(--primary-color);
+  padding: 10px;
+  color: white;
+  width: 100%;
+}
+.cross {
+  position: absolute;
+  bottom: 10px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  width: 80%;
+  justify-content: space-evenly;
+}
+.cross button {
+  padding: 15px 25px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+.cross svg {
+  cursor: pointer;
+}
+.excel {
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+}
+.pdf {
+  border: none;
+  background-color: var(--secondary-color);
+  color: white;
+}
+.excel:hover {
+  background-color: rgb(47, 93, 124);
+}
+.pdf:hover {
+  background-color: #38da7b;
+}
+.tile_search {
+  padding: 20px;
+  border: 2px solid var(--primary-color);
+  border-radius: 10px;
+  transition: all 0.16s ease-in;
+  cursor: pointer;
+}
+.tiles_search {
+  display: flex;
+  gap: 20px;
+  line-height: 1.4;
+  color: var(--primary-color);
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  justify-content: center;
+}
+.tile_search:hover {
+  transform: translateY(-10px) scale(1.01);
+  box-shadow: 0px 5px 5px black;
+}
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .screen,
+  .screen * {
+    visibility: visible;
+  }
+  .screen {
+    display: flex !important;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    background: white;
+    z-index: 999999;
+  }
+  table {
+    border-collapse: collapse;
+    border: 2px solid black;
+    width: 90%;
+    text-align: center;
+  }
+  table tr,
+  td {
+    border: 2px solid black;
+  }
+  table th {
+    font-size: 1.2rem;
+  }
+  table tr {
+    font-size: 1rem;
+  }
+  table th {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  .alltile,
+  button,
+  select {
+    display: none !important;
+  }
+}
