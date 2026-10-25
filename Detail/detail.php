@@ -3,37 +3,262 @@ error_reporting(E_ALL);
 
 include "../connect.php";
 
-if (!isset($_GET['id'])) {
-    exit("Invalid student ID.");
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'toggle_document') {
+    header('Content-Type: application/json;charset=utf-8');
+
+    $student = filter_input(INPUT_POST, 'student_id', FILTER_VALIDATE_INT);
+    $document = filter_input(INPUT_POST, 'document_id', FILTER_VALIDATE_INT);
+    $accepted = filter_input(INPUT_POST, 'accepted', FILTER_VALIDATE_INT);
+
+    if (!$student || !$document || !in_array($accepted, [0, 1], true)) {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'Invalid document selection.']);
+        exit;
+    }
+
+    $studentStmt = $connect->prepare("SELECT id FROM students WHERE id = ?");
+    $studentStmt->bind_param("i", $student);
+    $studentStmt->execute();
+    $studentExists = $studentStmt->get_result()->num_rows > 0;
+    $studentStmt->close();
+
+    $documentStmt = $connect->prepare("SELECT sno FROM documents WHERE sno = ? AND is_active = 1");
+    $documentStmt->bind_param("i", $document);
+    $documentStmt->execute();
+    $documentExists = $documentStmt->get_result()->num_rows > 0;
+    $documentStmt->close();
+
+    if (!$studentExists || !$documentExists) {
+        http_response_code(404);
+        echo json_encode(['status' => 'error', 'message' => 'Student or active document not found.']);
+        exit;
+    }
+
+    if ($accepted === 1) {
+        $checkStmt = $connect->prepare(
+            "SELECT id FROM student_documents WHERE student_id = ? AND document_id = ? LIMIT 1"
+        );
+        $checkStmt->bind_param("ii", $student, $document);
+        $checkStmt->execute();
+        $alreadyAccepted = $checkStmt->get_result()->num_rows > 0;
+        $checkStmt->close();
+
+        if (!$alreadyAccepted) {
+            $saveStmt = $connect->prepare(
+                "INSERT INTO student_documents (student_id, document_id) VALUES (?, ?)"
+            );
+            $saveStmt->bind_param("ii", $student, $document);
+            $saveStmt->execute();
+            $saveStmt->close();
+        }
+    } else {
+        $removeStmt = $connect->prepare(
+            "DELETE FROM student_documents WHERE student_id = ? AND document_id = ?"
+        );
+        $removeStmt->bind_param("ii", $student, $document);
+        $removeStmt->execute();
+        $removeStmt->close();
+    }
+
+    echo json_encode(['status' => 'done', 'accepted' => $accepted]);
+    $connect->close();
+    exit;
 }
 
-$sno = (int) $_GET['id'];
+if (isset($_GET['user']) && isset($_GET['id'])) {
+    header('Content-Type:application/json;charset=utf-8');
+    $student = $_GET['id'];
+    $sql = "SELECT
+                d.sno AS document_id,
+                d.name AS document_name,
+                CASE
+                    WHEN sd.id IS NULL THEN 0
+                    ELSE 1
+                END AS accepted
+            FROM documents d
+            LEFT JOIN student_documents sd
+                ON sd.document_id = d.sno
+                AND sd.student_id = ?
+            WHERE d.is_active = 1
+            ORDER BY d.name ASC";
 
-/* Student details fetch */
-$sql = "SELECT * FROM students WHERE id = ?";
-$stmt = $connect->prepare($sql);
-$stmt->bind_param("i", $sno);
-$stmt->execute();
+    $stmt = $connect->prepare($sql);
+    $stmt->bind_param("i", $student);
+    $stmt->execute();
 
-$result = $stmt->get_result();
-$student = $result->fetch_assoc();
+    $document = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    $stmt->close();
 
-if (!$student) {
-    exit("Student not found.");
+    echo json_encode($document);
+    exit;
+
+
 }
 
-/* Education details fetch */
-$sql = "SELECT * FROM student_education WHERE student_id = ?";
-$stmt = $connect->prepare($sql);
-$stmt->bind_param("i", $sno);
-$stmt->execute();
+if (isset($_GET['id'])) {
+    $sno = $_GET['id'];
+    $sql = "SELECT * FROM students WHERE id = ?";
+    $stmt = $connect->prepare($sql);
+    $stmt->bind_param("i", $sno);
+    $stmt->execute();
 
-$result = $stmt->get_result();
-$education = $result->fetch_assoc();
+    $result = $stmt->get_result();
+    $student = $result->fetch_assoc();
 
-if (!$education) {
-    $education = [];
+    if (!$student) {
+        exit("Student not found.");
+    }
+
+    /* Education details fetch */
+    $sql = "SELECT * FROM student_education WHERE student_id = ?";
+    $stmt = $connect->prepare($sql);
+    $stmt->bind_param("i", $sno);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $education = $result->fetch_assoc();
+
+    if (!$education) {
+        $education = [];
+    }
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $name = trim($_POST['name'] ?? '');
+    $branch = trim($_POST['branch'] ?? '');
+    $session = trim($_POST['session'] ?? '');
+    $admission = trim($_POST['admission'] ?? '');
+    $guardian = trim($_POST['guardian'] ?? '');
+    $dob = trim($_POST['dob'] ?? '');
+    $permanent_address = trim($_POST['permanent_address'] ?? '');
+    $mailing_address = trim($_POST['mailing_address'] ?? '');
+    $phone1 = trim($_POST['phone1'] ?? '');
+    $phone2 = trim($_POST['phone2'] ?? '');
+    $category = $_POST['category'] ?? '';
+    $other = $_POST['other'] ?? '';
+    $school = trim($_POST['school'] ?? '');
+
+    $highschoolyear = trim($_POST['highschoolyear'] ?? '');
+    $highschoolboardname = trim($_POST['highschoolboardname'] ?? '');
+    $highschoolmarks = trim($_POST['highschoolmarks'] ?? '');
+    $highschoolpercentage = trim($_POST['highschoolpercentage'] ?? '');
+    $highschoolcategory = trim($_POST['highschoolcategory'] ?? '');
+
+    $intermediateyear = trim($_POST['intermediateyear'] ?? '');
+    $intermediateboardname = trim($_POST['intermediateboardname'] ?? '');
+    $intermediatemarks = trim($_POST['intermediatemarks'] ?? '');
+    $intermediatepercentage = trim($_POST['intermediatepercentage'] ?? '');
+    $intermediatecategory = trim($_POST['intermediatecategory'] ?? '');
+
+    $otheryear = trim($_POST['otheryear'] ?? '');
+    $otherboardname = trim($_POST['otherboardname'] ?? '');
+    $othermarks = trim($_POST['othermarks'] ?? '');
+    $otherpercentage = trim($_POST['otherpercentage'] ?? '');
+    $education_othercategory = trim($_POST['othercategory'] ?? '');
+
+    try {
+        $connect->begin_transaction();
+
+        /* Update students table */
+        $sql = "UPDATE students SET
+                    candidate_name = ?,
+                    syllabus = ?,
+                    academic_session = ?,
+                    admission_id = ?,
+                    guardian_name = ?,
+                    dob = ?,
+                    permanent_address = ?,
+                    mailing_address = ?,
+                    contact1 = ?,
+                    contact2 = ?,
+                    category = ?,
+                    other_category = ?,
+                    previous_school = ?
+                WHERE id = ?";
+
+        $stmt = $connect->prepare($sql);
+
+        $stmt->bind_param(
+            "sssssssssssssi",
+            $name,
+            $branch,
+            $session,
+            $admission,
+            $guardian,
+            $dob,
+            $permanent_address,
+            $mailing_address,
+            $phone1,
+            $phone2,
+            $category,
+            $other,
+            $school,
+            $sno
+        );
+
+        $stmt->execute();
+        $stmt->close();
+
+        /* Update student_education table */
+        $sql = "UPDATE student_education SET
+                    highschoolyear = ?,
+                    highschoolboardname = ?,
+                    highschoolmarks = ?,
+                    highschoolpercentage = ?,
+                    highschoolcategory = ?,
+                    intermediateyear = ?,
+                    intermediateboardname = ?,
+                    intermediatemarks = ?,
+                    intermediatepercentage = ?,
+                    intermediatecategory = ?,
+                    otheryear = ?,
+                    otherboardname = ?,
+                    othermarks = ?,
+                    otherpercentage = ?,
+                    education_othercategory = ?
+                WHERE student_id = ?";
+
+        $stmt = $connect->prepare($sql);
+
+        $stmt->bind_param(
+            "sssssssssssssssi",
+            $highschoolyear,
+            $highschoolboardname,
+            $highschoolmarks,
+            $highschoolpercentage,
+            $highschoolcategory,
+            $intermediateyear,
+            $intermediateboardname,
+            $intermediatemarks,
+            $intermediatepercentage,
+            $intermediatecategory,
+            $otheryear,
+            $otherboardname,
+            $othermarks,
+            $otherpercentage,
+            $education_othercategory,
+            $sno
+        );
+
+        $stmt->execute();
+        $stmt->close();
+
+        $connect->commit();
+
+        echo "<script>alert('Updated !!')</script>";
+        header("Location: detail.php?id=" . $sno . "&updated=1");
+        exit;
+
+    } catch (Throwable $e) {
+        $connect->rollback();
+        error_log($e->getMessage());
+        $message = "Update failed. Please check the database columns and try again.";
+        echo "<script>alert('Something went wrong')</script>";
+    }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -129,14 +354,16 @@ if (!$education) {
                 <!-- phone1 -->
                 <div class="tile_detail">
                     <p>Contact Phone No.(1) : </p>
-                    <input type="tel" name="phone1" value="<?= $student['contact1'] ?? '' ?>" min="10" max="10">
+                    <input type="tel" name="phone1" value="<?= $student['contact1'] ?? '' ?>" minlength="10"
+                        maxlength="10">
                 </div>
                 <!--end of phone1 -->
 
                 <!-- phone2 -->
                 <div class="tile_detail">
                     <p>Contact Phone No.(2) : </p>
-                    <input type="tel" name="phone2" value="<?= $student['contact2'] ?? '' ?>" min="10" max="10">
+                    <input type="tel" name="phone2" value="<?= $student['contact2'] ?? '' ?>" minlength="10"
+                        maxlength="10">
                 </div>
                 <!--end of phone2 -->
 
@@ -144,7 +371,8 @@ if (!$education) {
                 <div class="tile_detail address">
                     <p>Category : </p>
                     <select name="category">
-                        <option value="" <?= ($student['category'] ?? '') === '' ? 'selected' : '' ?>> वर्ग चुनें / Select Category</option>
+                        <option value="" <?= ($student['category'] ?? '') === '' ? 'selected' : '' ?>> वर्ग चुनें / Select
+                            Category</option>
                         <option value="सामान्य / Specify General" <?= ($student['category'] ?? '') === 'सामान्य / Specify General' ? 'selected' : '' ?>>सामान्य / Specify General</option>
                         <option value="पिछड़ी जाति / Backward Class" <?= ($student['category'] ?? '') === 'पिछड़ी जाति / Backward Class' ? 'selected' : '' ?>>पिछड़ी जाति / Backward Class</option>
                         <option value="अनुसूचित जाति / Scheduled Caste" <?= ($student['category'] ?? '') === 'अनुसूचित जाति / Scheduled Caste' ? 'selected' : '' ?>>अनुसूचित जाति / Scheduled Caste</option>
@@ -158,12 +386,16 @@ if (!$education) {
 
                     <p>Other</p>
                     <select name="other">
-                        <option value="लागू नहीं / सामान्य (None / Not Applicable)" <?= ($student['other_category'] ?? '') === 'लागू नहीं / सामान्य (None / Not Applicable)' ? 'selected' : '' ?>>लागू नहीं / सामान्य (None / Not
+                        <option value="लागू नहीं / सामान्य (None / Not Applicable)" <?= ($student['other_category'] ?? '') === 'लागू नहीं / सामान्य (None / Not Applicable)' ? 'selected' : '' ?>>लागू नहीं / सामान्य
+                            (None / Not
                             Applicable)</option>
-                        <option value="विकलांग / Physically Handicapped" <?= ($student['other_category'] ?? '') === 'विकलांग / Physically Handicapped' ? 'selected' : '' ?>>विकलांग / Physically Handicapped</option>
-                        <option value="सैनिक आश्रित (Freedom Fighter / Armed Forces Dependent)" <?= ($student['other_category'] ?? '') === 'सैनिक आश्रित (Freedom Fighter / Armed Forces Dependent)' ? 'selected' : '' ?>>सैनिक आश्रित (Freedom
+                        <option value="विकलांग / Physically Handicapped" <?= ($student['other_category'] ?? '') === 'विकलांग / Physically Handicapped' ? 'selected' : '' ?>>विकलांग / Physically
+                            Handicapped</option>
+                        <option value="सैनिक आश्रित (Freedom Fighter / Armed Forces Dependent)"
+                            <?= ($student['other_category'] ?? '') === 'सैनिक आश्रित (Freedom Fighter / Armed Forces Dependent)' ? 'selected' : '' ?>>सैनिक आश्रित (Freedom
                             Fighter / Armed Forces Dependent)</option>
-                        <option value="राजनैतिक पीड़ित / Political Sufferer"  <?= ($student['other_category'] ?? '') === 'राजनैतिक पीड़ित / Political Sufferer' ? 'selected' : '' ?>>राजनैतिक पीड़ित / Political Sufferer
+                        <option value="राजनैतिक पीड़ित / Political Sufferer" <?= ($student['other_category'] ?? '') === 'राजनैतिक पीड़ित / Political Sufferer' ? 'selected' : '' ?>>राजनैतिक पीड़ित /
+                            Political Sufferer
                         </option>
                     </select>
                 </div>
@@ -181,43 +413,61 @@ if (!$education) {
 
 
             <!-- Table -->
-        <div class="table">
-          <table class="realtable">
-            <tr>
-              <th>परीक्षा का नाम / Name of the examination</th>
-              <th>उत्तीर्ण का वर्ष / Year of passing</th>
-              <th>बोर्ड / संस्था का नाम / Name of the Board / Organization</th>
-              <th>प्राप्तांक / Marks obtained</th>
-              <th>प्रतिशत / Percentage</th>
-              <th>श्रेणी / Category</th>
-            </tr>
-            <tr>
-              <td>हाईस्कूल / High School</td>
-              <td><input type="text" name="highschoolyear" placeholder="Year of passing" value="none" required></td>
-              <td><input type="text" value="none" name="highschoolboardname" placeholder="बोर्ड / संस्था का नाम / Name of the Board / Organization" required></td>
-              <td><input type="text" value="none" name="highschoolmarks" placeholder="प्राप्तांक / Marks obtained" required></td>
-              <td><input type="text" value="none" name="highschoolpercentage" placeholder="प्रतिशत / Percentage" required></td>
-              <td><input type="text" value="none" name="highschoolcategory" placeholder="श्रेणी / Category" required></td>
-            </tr>
-            <tr>
-              <td>इण्टरमीडिएट / Intermediate</td>
-              <td><input type="text" value="none" name="intermediateyear" placeholder="Year of passing" required></td>
-              <td><input type="text" value="none" name="intermediateboardname" placeholder="बोर्ड / संस्था का नाम / Name of the Board / Organization" required></td>
-              <td><input type="text" value="none" name="intermediatemarks" placeholder="प्राप्तांक / Marks obtained" required></td>
-              <td><input type="text" value="none" name="intermediatepercentage" placeholder="प्रतिशत / Percentage" required></td>
-              <td><input type="text" value="none" name="intermediatecategory" placeholder="श्रेणी / Category" required></td>
-            </tr>
-            <tr>
-              <td>अन्य (यदि कोई हो) / Other (if any)</td>
-              <td><input type="text" value="none" name="otheryear" placeholder="Year of passing" required></td>
-              <td><input type="text" value="none" name="otherboardname" placeholder="बोर्ड / संस्था का नाम / Name of the Board / Organization" required></td>
-              <td><input type="text" value="none" name="othermarks" placeholder="प्राप्तांक / Marks obtained" required></td>
-              <td><input type="text" value="none" name="otherpercentage" placeholder="प्रतिशत / Percentage" required></td>
-              <td><input type="text" value="none" name="othercategory" placeholder="श्रेणी / Category" required></td>
-            </tr>
-          </table>
-        </div>
-             <!-- table end -->
+            <div class="table">
+                <table class="realtable">
+                    <tr>
+                        <th>परीक्षा का नाम / Name of the examination</th>
+                        <th>उत्तीर्ण का वर्ष / Year of passing</th>
+                        <th>बोर्ड / संस्था का नाम / Name of the Board / Organization</th>
+                        <th>प्राप्तांक / Marks obtained</th>
+                        <th>प्रतिशत / Percentage</th>
+                        <th>श्रेणी / Category</th>
+                    </tr>
+                    <tr>
+                        <td>हाईस्कूल / High School</td>
+                        <td><input type="text" name="highschoolyear" placeholder="Year of passing"
+                                value="<?= $education['highschoolyear'] ?>"></td>
+                        <td><input type="text" name="highschoolboardname"
+                                placeholder="बोर्ड / संस्था का नाम / Name of the Board / Organization"
+                                value="<?= $education['highschoolboardname'] ?>"></td>
+                        <td><input type="text" name="highschoolmarks" placeholder="प्राप्तांक / Marks obtained"
+                                value="<?= $education['highschoolmarks'] ?>"></td>
+                        <td><input type="text" name="highschoolpercentage" placeholder="प्रतिशत / Percentage"
+                                value="<?= $education['highschoolpercentage'] ?>"></td>
+                        <td><input type="text" name="highschoolcategory" placeholder="श्रेणी / Category"
+                                value="<?= $education['highschoolcategory'] ?>"></td>
+                    </tr>
+                    <tr>
+                        <td>इण्टरमीडिएट / Intermediate</td>
+                        <td><input type="text" name="intermediateyear" placeholder="Year of passing"
+                                value="<?= $education['intermediateyear'] ?>"></td>
+                        <td><input type="text" name="intermediateboardname"
+                                placeholder="बोर्ड / संस्था का नाम / Name of the Board / Organization"
+                                value="<?= $education['intermediateboardname'] ?>"></td>
+                        <td><input type="text" name="intermediatemarks" placeholder="प्राप्तांक / Marks obtained"
+                                value="<?= $education['intermediatemarks'] ?>"></td>
+                        <td><input type="text" name="intermediatepercentage" placeholder="प्रतिशत / Percentage"
+                                value="<?= $education['intermediatepercentage'] ?>"></td>
+                        <td><input type="text" name="intermediatecategory" placeholder="श्रेणी / Category"
+                                value="<?= $education['intermediatecategory'] ?>"></td>
+                    </tr>
+                    <tr>
+                        <td>अन्य (यदि कोई हो) / Other (if any)</td>
+                        <td><input type="text" name="otheryear" placeholder="Year of passing"
+                                value="<?= $education['otheryear'] ?>"></td>
+                        <td><input type="text" name="otherboardname"
+                                placeholder="बोर्ड / संस्था का नाम / Name of the Board / Organization"
+                                value="<?= $education['otherboardname'] ?>"></td>
+                        <td><input type="text" name="othermarks" placeholder="प्राप्तांक / Marks obtained"
+                                value="<?= $education['othermarks'] ?>"></td>
+                        <td><input type="text" name="otherpercentage" placeholder="प्रतिशत / Percentage"
+                                value="<?= $education['otherpercentage'] ?>"></td>
+                        <td><input type="text" name="othercategory" placeholder="श्रेणी / Category"
+                                value="<?= $education['education_othercategory'] ?>"></td>
+                    </tr>
+                </table>
+            </div>
+            <!-- table end -->
             <div class="button">
                 <button type="submit">Update</button>
             </div>
@@ -225,6 +475,27 @@ if (!$education) {
         </div>
 
     </form>
+    <!-- form end -->
+
+    <!--document heading -->
+    <div style="display: flex;justify-content:center;">
+        <div class="dashname" style="width: 90%; margin-bottom:20px;">Documents</div>
+    </div>
+    <!-- End of document heading -->
+
+    <!-- Field -->
+    <div class="field">
+
+
+
+    </div>
+    <!-- Field End -->
+
+    <div class="printmain">
+        <div class="print">
+            <button class="pdf" onclick="window.print()">Print In Pdf</button>
+        </div>
+    </div>
 
     <script src="details.js"></script>
 </body>
