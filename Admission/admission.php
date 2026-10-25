@@ -243,12 +243,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
            <div class="tile">
                 <div> सम्पर्क दूरभाष सं० / Contact Phone No.(1)</div>
-                <input type="tel" class="input" placeholder="Enter Contact Phone No.(1)" name="firstphone" required>
+                <input type="tel" class="input" placeholder="Enter Contact Phone No.(1)" name="firstphone" minlength='10' maxlength='10' required>
           </div>
               <!-- Second Number -->
           <div class="tile">
                 <div> सम्पर्क दूरभाष सं० / Contact Phone No.(2)</div>
-                <input type="tel" class="input" placeholder="Enter Contact Phone No.(2)" name="secondphone" required>
+                <input type="tel" class="input" placeholder="Enter Contact Phone No.(2)" name="secondphone" minlength='10' maxlength='10' required>
           </div>
 
           <!-- End of Contact Number tile -->
