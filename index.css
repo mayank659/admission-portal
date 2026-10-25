@@ -38,3 +38,25 @@ a{
     font-family:Verdana, Geneva, Tahoma, sans-serif;
     color: var(--primary-color);
 }
+.backup-form{
+    margin: 0;
+}
+.backup-button{
+    background: white;
+    min-height: 148px;
+}
+.backup-message{
+    width: 90%;
+    margin: 18px auto 0;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.backup-message.success{
+    color: #155724;
+    background: #d4edda;
+}
+.backup-message.error{
+    color: #721c24;
+    background: #f8d7da;
+}

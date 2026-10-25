@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+$backupMessage = isset($_SESSION['backup_message']) ? $_SESSION['backup_message'] : null;
+$backupMessageType = isset($_SESSION['backup_message_type']) ? $_SESSION['backup_message_type'] : 'success';
+unset($_SESSION['backup_message'], $_SESSION['backup_message_type']);
+
+if (!isset($_SESSION['backup_csrf_token'])) {
+    $_SESSION['backup_csrf_token'] = bin2hex(random_bytes(32));
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,6 +31,12 @@
     <div style="display: flex;justify-content:center;">
         <div class="dashname">Dashboard</div>
     </div>
+
+    <?php if ($backupMessage !== null): ?>
+        <p class="backup-message <?php echo htmlspecialchars($backupMessageType, ENT_QUOTES, 'UTF-8'); ?>" role="status" style="text-align:center;">
+            <?php echo htmlspecialchars($backupMessage, ENT_QUOTES, 'UTF-8'); ?>
+        </p>
+    <?php endif; ?>
 
     <!-- tiles -->
     <div class="dashboard">
@@ -103,6 +120,15 @@
         </a>
         <!-- End of Document tile -->
 
+        <form class="backup-form" action="backup.php" method="post">
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['backup_csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+            <button class="list backup-button" type="submit" onclick="return confirm('Create a full database backup now?');">
+                <svg width="60px" height="60px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v3h16v-3" stroke="#164f76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span>Database Backup</span>
+            </button>
+        </form>
 
     </div>
 
