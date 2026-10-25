@@ -138,12 +138,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $stmt2->close();
 
     $connect->commit();
-    echo "<div class='alert alert-success'>Form submitted successfully!</div>";
+    echo "<div class='alert alert-success'>Form submitted successfully!</div><script>alert('Form submitted Successfully')</script>";
 
   }catch(Throwable $e){
         $connect->rollback();
         error_log($e->getMessage());
-        echo "<div class='alert alert-danger'>Please check form again !!</div>";
+        echo "<div class='alert alert-danger'>Please check form again !!</div><script>alert('There is a problem !!')</script>";
   }
   $connect->close();
 }

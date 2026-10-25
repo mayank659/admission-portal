@@ -63,6 +63,9 @@ form.addEventListener("submit", (e) => {
 
     tiles.replaceChildren();
     studentdata.forEach((student) => {
+      const link =  document.createElement('a');
+      link.href = `../Detail/detail.php?id=${student.id}`;
+      link.className ="anchor";
       const tile = document.createElement("div");
       tile.className = "tile_search";
 
@@ -81,8 +84,8 @@ form.addEventListener("submit", (e) => {
         "Session :" + (student.academic_session ?? "N/A");
 
       tile.append(admission_id, name, branch, session);
-
-      tiles.appendChild(tile);
+      link.append(tile)
+      tiles.appendChild(link);
     });
     printmain.append(tiles);
   }

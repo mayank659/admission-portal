@@ -9,6 +9,33 @@
   .tile{
     width: 100%;
   }
+  .session input{
+    width: 80%;
+    font-size: 15px !important;
+  }
+  .session{
+    gap:5px;
+  }
+  .session p{
+    font-size: large;
+  }
+  .session button{
+    font-size: 13px;
+    padding:10px 20px;
+  }
+  .inputmain{
+    gap:5px;
+    padding: 5px;
+  }
+  .inputmain input{
+    padding: 10px 20px 10px 10px;
+    width: 80%;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+  .inputmain button{
+    font-size: 15px;
+  }
   .inputsyllabus{
     width: 100%;
   }
@@ -17,6 +44,14 @@
   }
   .formdiv{
     padding: 20px 10px;
+  }
+  #form{
+    padding: 0px !important;
+    overflow: hidden;
+  }
+  .formmain{
+    padding: 10px;
+    width: 100%;
   }
   .dashboard{
     padding: 20px !important;
@@ -31,10 +66,40 @@
   .dashname{
     font-size: larger !important;
   }
+  .box{
+    width: 100%;
+    padding: 5px;
+    padding-left: 10px;
+  }
+  .box input{
+    width: 100%;
+    padding: 0;
+  }
+  .box button{
+    font-size: 12px;
+  }
   .alltile{
     padding: 10px !important;
     font-size: large !important;
     width:100%;
+  }
+  .tiles{
+    padding: 10px;
+    gap:10px;
+  }
+  .tile_detail{
+    width: 100%;
+    display: flex;
+    align-items:center ;
+  }
+  .tile_detail p{
+    font-size: large;
+  }
+  .tile_detail input{
+    font-size: large;
+  }
+  .tile_detail select{
+    font-size: large;
   }
   .layout{
     display: none !important;

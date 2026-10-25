@@ -1,3 +1,5 @@
+
+
 let offset = 0;
 const limit = 20;
 let isLoading = false;
@@ -39,6 +41,8 @@ async function fetchStudents() {
 
     /* student card */
     students.forEach((student) => {
+      const link =  document.createElement('a');
+      link.href = `../Detail/detail.php?id=${student.id}`;
       const tile = document.createElement("div");
       tile.className = "alltile";
 
@@ -57,7 +61,8 @@ async function fetchStudents() {
         "Admission Session : " + (student.academic_session ?? "N/A");
 
       tile.append(admissionId, name, branch, session);
-      container.appendChild(tile);
+      link.append(tile);
+      container.appendChild(link);
 
       const academic_session = student.academic_session;
       if (academic_session && !session_info.has(academic_session)) {
