@@ -1,5 +1,5 @@
 -- Database backup for mmit_admission
--- Created: 2026-10-25T17:37:32+01:00
+-- Created: 2026-10-26T08:37:00+01:00
 
 CREATE DATABASE IF NOT EXISTS `mmit_admission`;
 USE `mmit_admission`;
@@ -21,10 +21,10 @@ INSERT INTO `documents` VALUES ('4', 'hi', '1', 0x323032362d31302d32342032323a32
 INSERT INTO `documents` VALUES ('5', 'hum', '1', 0x323032362d31302d32342032323a33323a3438);
 INSERT INTO `documents` VALUES ('7', 'hula', '1', 0x323032362d31302d32342032323a33333a3239);
 INSERT INTO `documents` VALUES ('8', 'humne', '1', 0x323032362d31302d32342032323a33353a3534);
-INSERT INTO `documents` VALUES ('9', 'hulaaaaa', '1', 0x323032362d31302d32342032323a33363a3031);
-INSERT INTO `documents` VALUES ('10', 'hume', '1', 0x323032362d31302d32342032323a33393a3333);
-INSERT INTO `documents` VALUES ('11', 'halo', '1', 0x323032362d31302d32342032323a34303a3438);
-INSERT INTO `documents` VALUES ('12', 'mai hu khiladi ', '1', 0x323032362d31302d32342032323a34303a3535);
+INSERT INTO `documents` VALUES ('9', 'hulaaaaa', '0', 0x323032362d31302d32342032323a33363a3031);
+INSERT INTO `documents` VALUES ('10', 'hume', '0', 0x323032362d31302d32342032323a33393a3333);
+INSERT INTO `documents` VALUES ('11', 'halo', '0', 0x323032362d31302d32342032323a34303a3438);
+INSERT INTO `documents` VALUES ('12', 'mai hu khiladi ', '0', 0x323032362d31302d32342032323a34303a3535);
 INSERT INTO `documents` VALUES ('13', 'hahaha', '0', 0x323032362d31302d32342032333a35373a3438);
 
 DROP TABLE IF EXISTS `student_documents`;
@@ -34,8 +34,9 @@ CREATE TABLE `student_documents` (
   `document_id` int(11) NOT NULL,
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `student_documents` VALUES ('10', '14', '5', 0x323032362d31302d32362031333a30363a3035);
 
 DROP TABLE IF EXISTS `student_education`;
 CREATE TABLE `student_education` (
@@ -69,9 +70,7 @@ INSERT INTO `student_education` VALUES ('7', '7', 'none', 'none', 'none', 'none'
 INSERT INTO `student_education` VALUES ('8', '8', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'cbse', 'none', 'none', 'none');
 INSERT INTO `student_education` VALUES ('9', '9', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'cbse', 'none', 'none', 'none');
 INSERT INTO `student_education` VALUES ('10', '10', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'cbse', 'none', 'none', 'none');
-INSERT INTO `student_education` VALUES ('11', '11', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none');
 INSERT INTO `student_education` VALUES ('12', '12', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none');
-INSERT INTO `student_education` VALUES ('13', '13', 'fail', 'none', 'none', 'none', 'none', 'fail', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none');
 INSERT INTO `student_education` VALUES ('14', '14', 'none', 'fail hai sab mai', '0', 'fail', 'none', 'none', 'hullaa', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none');
 
 DROP TABLE IF EXISTS `students`;
@@ -105,9 +104,7 @@ INSERT INTO `students` VALUES ('7', 'MMIT20260007', 'IT', '2024-25', 'aman', 'ma
 INSERT INTO `students` VALUES ('8', 'MMIT20260008', 'IT', '2024-25', 'aman', 'maya', 0x323032362d31302d3034, 'dsf', 'fddf', '123456780', '1234567890', 'अनुसूचित जाति / Scheduled Caste', 'सैनिक आश्रित (Freedom Fighter / Armed Forces Dependent)', 'aaaaaaaa', 0x323032362d31302d32302032333a33353a3133);
 INSERT INTO `students` VALUES ('9', 'MMIT20260009', 'IT', '2024-25', 'aman', 'maya', 0x323032362d31302d3034, 'dsf', 'fddf', '123456780', '1234567890', 'अनुसूचित जाति / Scheduled Caste', 'सैनिक आश्रित (Freedom Fighter / Armed Forces Dependent)', 'aaaaaaaa', 0x323032362d31302d32302032333a33353a3535);
 INSERT INTO `students` VALUES ('10', 'MMIT20260010', 'IT', '2024-25', 'aman', 'maya', 0x323032362d31302d3034, 'dsf', 'fddf', '123456780', '1234567890', 'अनुसूचित जाति / Scheduled Caste', 'सैनिक आश्रित (Freedom Fighter / Armed Forces Dependent)', 'aaaaaaaa', 0x323032362d31302d32302032333a33363a3038);
-INSERT INTO `students` VALUES ('11', 'MMIT20260011', 'CSE', '2027-28', 'AMAN', 'aman', 0x323032362d31302d3039, 'Choncha bangaon', 'chorahe ke pass', '07055528126', '7668631749', 'अनुसूचित जाति / Scheduled Caste', 'लागू नहीं / सामान्य (None / Not Applicable)', 'Dev inter college', 0x323032362d31302d32332031313a32303a3237);
 INSERT INTO `students` VALUES ('12', 'MMIT20260012', 'Electronic', '2027-28', 'rashmii', 'rashii', 0x323032362d31302d3139, 'sss', 'chorahe ke pass', '1234567890', '12345678', 'सामान्य / Specify General', 'विकलांग / Physically Handicapped', 'hula', 0x323032362d31302d32332031393a31373a3235);
-INSERT INTO `students` VALUES ('13', 'MMIT20260013', 'CSE', '2026-27', 'abhishek', 'abhi', 0x323032362d31302d3131, 'Choncha bangaon', 'chorahe ke pass', '07055528126', '07055528126', 'अनुसूचित जाति / Scheduled Caste', 'लागू नहीं / सामान्य (None / Not Applicable)', 'hula', 0x323032362d31302d32342031313a32353a3237);
 INSERT INTO `students` VALUES ('14', 'MMIT20260014', 'Electronic', '2026-27', 'moti', 'moti', 0x323032362d31302d3032, 'bada gaon', 'bada gaon', '1234567890', '1234567890', 'सामान्य / Specify General', 'लागू नहीं / सामान्य (None / Not Applicable)', 'fail', 0x323032362d31302d32352031303a31313a3536);
 
 SET FOREIGN_KEY_CHECKS=1;
