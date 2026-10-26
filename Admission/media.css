@@ -75,6 +75,9 @@
     width: 100%;
     padding: 0;
   }
+  .document-box{
+    font-size: 14px !important;
+  }
   .box button{
     font-size: 12px;
   }
@@ -118,5 +121,8 @@
   .print button{
     font-size: 13px !important;
     padding: 10px 20px !important;
+  }
+  .document-toggle{
+    min-width: 100px !important;
   }
 }
