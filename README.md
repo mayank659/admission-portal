@@ -1,6 +1,7 @@
 # College Admission Portal
 
 A web-based College Admission Portal developed using **PHP, MySQL, HTML, CSS, and JavaScript** to simplify student admission record management.
+## Screenshots
 
 ## Features
 
@@ -46,3 +47,9 @@ The main purpose of this project is to make college admission record management 
 ## Author
 
 Developed as a college project using PHP and MySQL.
+
+### Home Page
+![Home Page](Screenshots/home.png)
+
+### Student List
+![Student List](Screenshots/list.png)
